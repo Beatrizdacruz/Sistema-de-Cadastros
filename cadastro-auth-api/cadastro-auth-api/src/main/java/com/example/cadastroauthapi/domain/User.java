@@ -2,6 +2,9 @@ package com.example.cadastroauthapi.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -16,6 +19,25 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL) // Isso garante que a operação de adicionar endereço também seja refletida no banco de dados
+    @JoinColumn(name = "user_id") // Define a chave estrangeira na tabela de endereços para referenciar o ID do usuário
+    private List<Address> addresses = new ArrayList<>();
+    public void addAddress(Address address) {
+        addresses.add(address);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
