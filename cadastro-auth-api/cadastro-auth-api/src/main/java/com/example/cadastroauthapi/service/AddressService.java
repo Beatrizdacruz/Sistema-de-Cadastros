@@ -14,7 +14,7 @@ public class AddressService {
     private AddressRepository addressRepository;
 
     public List<Address> listAddress(String user_id){
-        return addressRepository.findAddressById(user_id);
+        return addressRepository.findAddressesByUserId(user_id);
     }
 
     public Address createAddress(Address address){
