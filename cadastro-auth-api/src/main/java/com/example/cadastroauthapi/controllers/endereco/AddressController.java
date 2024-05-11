@@ -1,7 +1,9 @@
 package com.example.cadastroauthapi.controllers.endereco;
 
 import com.example.cadastroauthapi.Repositories.AddressRepository;
-import com.example.cadastroauthapi.domain.endereco.Address;
+import com.example.cadastroauthapi.domain.Address;
+import com.example.cadastroauthapi.domain.User;
+import com.example.cadastroauthapi.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Component
 @Configuration
@@ -19,27 +23,56 @@ import java.util.List;
 @RequestMapping("/enderecos")
 public class AddressController {
     @Autowired
-    private AddressRepository enderecoRepository;
+    private AddressRepository addressRepository;
+    @Autowired
+    private AddressService addressService;
 
-    @GetMapping("/list-endereco")
-    public List<Address> getEnderecos() {
+    @GetMapping("/list-endereco/{user_id}")
+    public ResponseEntity<List<Address>> getEnderecos(@PathVariable String user_id, User user) {
         try {
-            return enderecoRepository.findAll();
+
+            //String user_id = user.getId();
+            List<Address> address = addressService.listAddress(user_id);
+            return ResponseEntity.ok(address);
+
         }catch (Exception exception){
-            ResponseEntity.badRequest().build();
+
+            ResponseEntity.badRequest().body("Ocorreu um erro ao listar endereço");
+
         }
         return null;
     }
 
-    @PostMapping("/add-endereco")
+    @PostMapping("/add-endereco/")
     public ResponseEntity<String> criarEndereco(@RequestBody Address address) {
         try {
-            enderecoRepository.save(address);
+            addressService.createAddress(address);
             return ResponseEntity.ok("Endereço criado com sucesso");
         }catch (Exception exception){
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Ocorreu um erro ao adicionar endereço");
         }
-        //ResponseEntity.badRequest().build();
-        return null;
+
     }
+
+    @PutMapping("/edit-endereco/{addressId}")
+    public ResponseEntity<String> editarEndereco(@PathVariable String addressId, @RequestBody Address address){
+        try {
+            addressService.updateAddress(addressId, address);
+            return ResponseEntity.ok("Endereço editado com sucesso");
+        }catch (Exception exception){
+            return ResponseEntity.badRequest().body("Ocorreu um erro ao editar endereço");
+        }
+    }
+
+    @DeleteMapping("/delete-endereco/{addressId}")
+    public ResponseEntity<String> deletarEndereco(@PathVariable String addressId){
+        try {
+            addressService.deleteAddress(addressId);
+            return ResponseEntity.ok("Endereço deletado com sucesso");
+        }catch (Exception exception){
+            return ResponseEntity.badRequest().body("Ocorreu um erro ao deletar endereço");
+        }
+
+    }
+
 }
