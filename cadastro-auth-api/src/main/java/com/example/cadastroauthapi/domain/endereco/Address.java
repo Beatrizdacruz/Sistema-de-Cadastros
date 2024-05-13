@@ -1,4 +1,4 @@
-package com.example.cadastroauthapi.domain.endereco;
+package com.example.cadastroauthapi.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,11 +15,18 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    //@Column(length = 9)
     private String cep;
+    //@Column(length = 50)
     private String logradouro;
+    //@Column(length = 50)
     private String bairro;
+    //@Column(length = 50)
     private String localidade;
+    //@Column(length = 50)
     private String uf;
+    private String user_id;
+
 
     public String getBairro() {
         return bairro;
@@ -59,5 +66,13 @@ public class Address {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }
