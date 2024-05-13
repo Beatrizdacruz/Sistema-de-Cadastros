@@ -31,11 +31,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//não guarda estado de login
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "enderecos/add-endereco").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/enderecos/list-endereco/{user_id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/enderecos/edit-endereco/{addressId}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "enderecos/delete-endereco/{addressId}").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/enderecos/list-endereco/{user_id}").permitAll()
+//                        .requestMatchers(HttpMethod.PUT, "/enderecos/edit-endereco/{addressId}").permitAll()
+//                        .requestMatchers(HttpMethod.DELETE, "enderecos/delete-endereco/{addressId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "enderecos/add-endereco").permitAll()
 
                         .anyRequest().authenticated()
                 )
