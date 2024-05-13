@@ -43,15 +43,16 @@ public class AddressController {
         return null;
     }
 
-    @PostMapping("/add-endereco/")
-    public ResponseEntity<String> criarEndereco(@RequestBody Address address) {
+   @PostMapping("/add-endereco")
+    public ResponseEntity<?> criarEndereco(@RequestBody Address address) {
         try {
-            addressService.createAddress(address);
-            return ResponseEntity.ok("Endereço criado com sucesso");
-        }catch (Exception exception){
-            return ResponseEntity.badRequest().body("Ocorreu um erro ao adicionar endereço");
+            Address novoEndereco = addressService.createAddress(address);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Endereço criado com sucesso. ID: " + novoEndereco.getId());
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ocorreu um erro ao adicionar endereço: " + exception.getMessage());
         }
-
     }
 
     @PutMapping("/edit-endereco/{addressId}")
